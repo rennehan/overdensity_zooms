@@ -1,0 +1,27 @@
+#!/bin/bash -l
+#########################################################
+#SBATCH -J generate_overdensity_cells
+#SBATCH -p cca
+##SBATCH -p preempt --qos=preempt
+#SBATCH -p mem
+##SBATCH --mail-user=you@email.com
+#SBATCH --mail-type=FAIL 
+#SBATCH -o ./logs/generate_overdensity_cells-%j.out
+#########################################################
+#SBATCH --time=24:0:0
+#SBATCH --nodes=1
+#SBATCH --ntasks=1
+##SBATCH --array=138,144
+#SBATCH --cpus-per-task=96
+#########################################################
+
+source /mnt/home/drennehan/venvs/flathub/bin/activate
+
+DATA_DIR=/mnt/home/drennehan/ceph/simulating_the_universe/overdensity_intersections/sims/4096_800/output
+NUM_FILES=8
+SNAPSHOT_IDX=111
+FILE_TYPE="gadget"      # gadget or swift
+
+python -u generate_overdensity_cells.py ${DATA_DIR} ${NUM_FILES} ${SNAPSHOT_IDX} ${FILE_TYPE}
+
+#########################################################
